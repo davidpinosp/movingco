@@ -249,23 +249,20 @@ body{font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans
   .benefit-item p{font-size:15px;}
 }
 
-/* Why Choose Us CTA */
-.why-choose-us-cta{text-align:center; margin-top:60px; padding:40px 32px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.6) 100%); border:1px solid var(--ring); border-radius:24px; box-shadow: var(--shadow-lg); backdrop-filter: blur(20px); position: relative; overflow: hidden;}
-.why-choose-us-cta::before{content:''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--brand), var(--brand-ink), var(--brand));}
-.cta-content{position: relative; z-index: 1;}
-.why-choose-us-cta h3{font-size:28px; font-weight:700; margin:0 0 12px; color:var(--ink); letter-spacing: -0.01em;}
-.cta-subtitle{font-size:18px; color:var(--muted); margin:0 0 24px; font-weight: 500; line-height: 1.5;}
+/* Why Choose Us CTA - Small Version */
+.why-choose-us-cta-small{text-align:center; margin-top:40px; padding:24px 0; border-top: 1px solid var(--ring);}
+.cta-content-small{display: flex; flex-direction: column; align-items: center; gap: 16px;}
+.why-choose-us-cta-small h4{font-size:20px; font-weight:600; margin:0; color:var(--ink); letter-spacing: -0.01em;}
 
 @media (max-width: 768px){
-  .why-choose-us-cta{margin-top:48px; padding:32px 24px;}
-  .why-choose-us-cta h3{font-size:24px;}
-  .cta-subtitle{font-size:16px; margin:0 0 20px;}
+  .why-choose-us-cta-small{margin-top:32px;}
+  .cta-content-small{gap: 12px;}
+  .why-choose-us-cta-small h4{font-size:18px;}
 }
 
 @media (max-width: 640px){
-  .why-choose-us-cta{margin-top:40px; padding:28px 20px; border-radius:20px;}
-  .why-choose-us-cta h3{font-size:22px;}
-  .cta-subtitle{font-size:15px; margin:0 0 18px;}
+  .why-choose-us-cta-small{margin-top:28px;}
+  .why-choose-us-cta-small h4{font-size:16px;}
 }
 
 /* Contact */
