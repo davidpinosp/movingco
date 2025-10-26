@@ -107,6 +107,13 @@ body{font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans
   .brand-name{font-size: var(--font-lg);}
   .brand-subtitle{font-size: var(--font-xs);}
   .logo-img{width: clamp(45px, 4vw, 50px); height: clamp(45px, 4vw, 50px);}
+  
+  /* Make the hero CTA button larger on mobile */
+  .hero .btn {
+    font-size: var(--font-lg);
+    padding: var(--space-md) var(--space-lg);
+    min-height: 52px;
+  }
 }
 
 /* Button text responsive behavior */
@@ -603,6 +610,11 @@ body{font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans
 .breakdown-item.total span:last-child{color:var(--brand); font-size: var(--font-lg);}
 
 .result-actions{display:flex; flex-direction:column; gap: var(--space-sm); margin-bottom: var(--space-md);}
+.result-actions .btn{
+  font-size: var(--font-lg);
+  padding: var(--space-md) var(--space-lg);
+  font-weight: 700;
+}
 .result-note{background:var(--brand-light); border-radius:12px; padding: var(--space-md); border:1px solid var(--brand-light);}
 .result-note p{margin:0; font-size: var(--font-sm); color:var(--brand-ink); line-height:1.5;}
 
