@@ -39,12 +39,39 @@
 
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
-body{font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color:var(--ink); background: linear-gradient(180deg, var(--bg-grad-1), var(--bg-grad-2) 60%, var(--bg)); line-height: 1.6; font-size: var(--font-base);}
+html{
+  /* iOS Safari fixes for viewport handling */
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  /* Prevent iOS Safari from changing viewport on orientation change */
+  -webkit-overflow-scrolling: touch;
+}
+body{font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color:var(--ink); background: linear-gradient(180deg, var(--bg-grad-1), var(--bg-grad-2) 60%, var(--bg)); line-height: 1.6; font-size: var(--font-base);
+  /* iOS Safari fixes */
+  -webkit-overflow-scrolling: touch;
+  /* Prevent iOS Safari from changing viewport on scroll */
+  position: relative;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+}
 
 .container{max-width:1200px;margin:0 auto;padding:0 clamp(1rem, 2vw, 2rem)}
 
 /* Nav */
-.nav{background: rgba(255,255,255,0.8); backdrop-filter: saturate(180%) blur(20px); border-bottom:1px solid var(--ring); position:sticky; top:0; z-index:20; box-shadow: var(--shadow-sm);}
+.nav{background: rgba(255,255,255,0.8); backdrop-filter: saturate(180%) blur(20px); border-bottom:1px solid var(--ring); position:sticky; top:0; z-index:20; box-shadow: var(--shadow-sm); 
+  /* iOS Safari fixes */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /* Prevent navbar from being cut off on iOS */
+  position: -webkit-sticky;
+  position: sticky;
+  /* Handle iOS Safari address bar behavior */
+  min-height: 60px;
+  /* Ensure proper stacking context */
+  isolation: isolate;
+}
 .nav-inner{display:flex; align-items:center; justify-content:space-between; padding: var(--space-md) clamp(1rem, 2vw, 2rem);}
 .brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit; transition: transform 0.2s ease;}
 .brand:hover .logo-img{transform: scale(1.05);}
@@ -137,6 +164,51 @@ body{font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans
   .location-badge{display: none;}
   .location-label{display: none;}
   .location-icon{display: none;}
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+  /* This targets iOS Safari specifically */
+  .nav {
+    /* Ensure navbar stays visible during iOS Safari address bar transitions */
+    position: -webkit-sticky;
+    position: sticky;
+    /* Force hardware acceleration */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    /* Prevent navbar from being affected by iOS Safari's dynamic viewport */
+    will-change: transform;
+  }
+  
+  body {
+    /* Use the full viewport height on iOS */
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+  
+  /* Ensure proper scrolling behavior on iOS */
+  .hero, .steps, .services, .why-choose-us, .price-calculator, .reviews, .contact {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+  
+  /* Navbar scroll behavior for iOS */
+  .nav-scrolled {
+    /* Ensure navbar stays visible when scrolling */
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    /* Force hardware acceleration during scroll */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Use the dynamic viewport height for iOS */
+@supports (-webkit-touch-callout: none) {
+  .hero {
+    min-height: calc(var(--vh, 1vh) * 100);
+  }
 }
 
 /* Hero */

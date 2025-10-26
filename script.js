@@ -248,8 +248,99 @@ class ClipboardManager {
   }
 }
 
+// iOS Safari navbar fix
+class IOSNavbarFix {
+  constructor() {
+    this.isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    this.isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+    this.lastScrollTop = 0;
+    this.navbar = null;
+    
+    if (this.isIOS && this.isSafari) {
+      this.init();
+    }
+  }
+
+  init() {
+    this.navbar = document.querySelector('.nav');
+    if (!this.navbar) return;
+
+    // Set initial viewport height
+    this.setViewportHeight();
+    
+    // Handle scroll events
+    this.handleScroll();
+    
+    // Handle orientation change
+    this.handleOrientationChange();
+    
+    // Handle resize events
+    this.handleResize();
+  }
+
+  setViewportHeight() {
+    // Set CSS custom property for viewport height
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }
+
+  handleScroll() {
+    let ticking = false;
+    
+    const updateNavbar = () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      
+      // Add/remove class based on scroll direction
+      if (scrollTop > this.lastScrollTop && scrollTop > 100) {
+        // Scrolling down
+        this.navbar.classList.add('nav-scrolled');
+      } else {
+        // Scrolling up
+        this.navbar.classList.remove('nav-scrolled');
+      }
+      
+      this.lastScrollTop = scrollTop;
+      ticking = false;
+    };
+
+    const requestTick = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateNavbar);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', requestTick, { passive: true });
+  }
+
+  handleOrientationChange() {
+    window.addEventListener('orientationchange', () => {
+      // Delay to ensure viewport has updated
+      setTimeout(() => {
+        this.setViewportHeight();
+        // Force a reflow to ensure navbar positioning is correct
+        this.navbar.style.transform = 'translateZ(0)';
+        setTimeout(() => {
+          this.navbar.style.transform = '';
+        }, 100);
+      }, 500);
+    });
+  }
+
+  handleResize() {
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        this.setViewportHeight();
+      }, 250);
+    });
+  }
+}
+
 // Initialize price calculator when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
   new PriceCalculator();
   new ClipboardManager();
+  new IOSNavbarFix();
 });
