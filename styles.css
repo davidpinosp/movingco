@@ -102,8 +102,8 @@ body{font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans
 .location-text{display: flex; align-items: center; gap: 20px; flex-wrap: wrap;}
 .location-label{font-size: 16px; font-weight: 500; opacity: 0.9; white-space: nowrap;}
 .cities{display: flex; gap: 16px; flex-wrap: wrap;}
-.city{background: rgba(255, 255, 255, 0.2); padding: 6px 14px; border-radius: 16px; font-weight: 600; font-size: 14px; border: 1px solid rgba(255, 255, 255, 0.3); backdrop-filter: blur(10px); transition: all 0.3s ease;}
-.city:hover{background: rgba(255, 255, 255, 0.3); transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);}
+.city{background: rgba(255, 255, 255, 0.2); padding: 6px 14px; border-radius: 16px; font-weight: 600; font-size: 14px; border: 1px solid rgba(255, 255, 255, 0.3); backdrop-filter: blur(10px); transition: all 0.3s ease; color: white; text-decoration: none;}
+.city:hover{background: rgba(255, 255, 255, 0.3); transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); color: white; text-decoration: none;}
 .location-badge{background: rgba(255, 255, 255, 0.2); padding: 6px 14px; border-radius: 16px; font-weight: 600; font-size: 13px; border: 1px solid rgba(255, 255, 255, 0.3); backdrop-filter: blur(10px); animation: glow 2s ease-in-out infinite alternate; white-space: nowrap;}
 @keyframes glow{from{box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);}to{box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);}}
 @media (max-width: 768px){
@@ -341,8 +341,8 @@ body{font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans
 .contact-visual{display: flex; justify-content: center; align-items: center;}
 .house-image{width: 100%; max-width: 400px; height: auto; border-radius: 24px; box-shadow: var(--shadow-xl); object-fit: contain;}
 .contact-text{text-align: left;}
-.contact h2{font-size: var(--font-5xl); margin:0 0 var(--space-lg); font-weight:800; letter-spacing: -0.02em;}
-.contact-subtitle{font-size: var(--font-xl); margin-bottom: var(--space-md); line-height:1.6; color: var(--muted);}
+.contact h2{font-size: var(--font-5xl); margin:0 0 var(--space-md); font-weight:800; letter-spacing: -0.02em;}
+.contact-subtitle{font-size: var(--font-xl); margin-bottom: var(--space-lg); line-height:1.6; color: var(--muted);}
 .effortless-reminder{font-size: var(--font-base); margin-bottom: var(--space-2xl); line-height:1.6; color: var(--brand); font-weight:600; font-style:italic;}
 
 .contact-actions{
@@ -477,6 +477,22 @@ body{font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans
 /* Footer */
 .footer{border-top:1px solid var(--ring); background:rgba(255,255,255,.8); backdrop-filter: saturate(180%) blur(10px);}
 .footer-inner{padding:32px 0; text-align:center; color:var(--muted);}
+.footer-content{display:flex; flex-direction:column; gap: var(--space-lg); align-items:center;}
+.footer-links{text-align:center;}
+.footer-links h4{font-size: var(--font-lg); font-weight:600; margin:0 0 var(--space-md); color:var(--ink);}
+.footer-cities{display:flex; flex-wrap:wrap; gap: var(--space-md); justify-content:center; max-width:600px;}
+.footer-cities a{color:var(--muted); text-decoration:none; font-size: var(--font-sm); font-weight:500; padding: var(--space-xs) var(--space-sm); border-radius:8px; transition:all 0.3s ease; border:1px solid transparent;}
+.footer-cities a:hover{color:var(--brand); background:var(--brand-light); border-color:var(--brand-light); transform:translateY(-1px);}
+.footer-copyright{margin-top: var(--space-md);}
+.footer-copyright p{font-size: var(--font-sm); margin:0;}
+.footer-copyright a{color:var(--brand); text-decoration:none; transition:color 0.3s ease;}
+.footer-copyright a:hover{color:var(--brand-ink);}
+
+@media (max-width: 768px){
+  .footer-cities{gap: var(--space-sm);}
+  .footer-cities a{font-size: var(--font-xs); padding: var(--space-xs);}
+  .footer-links h4{font-size: var(--font-base);}
+}
 
 /* Price Calculator */
 .price-calculator{padding: var(--space-3xl) 0; background: linear-gradient(180deg, var(--bg-grad-1), var(--bg));}

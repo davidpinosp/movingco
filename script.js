@@ -81,77 +81,51 @@ class PriceCalculator {
   updateBreakdown(breakdownElement) {
     let breakdownHTML = '';
     
-    // Base price breakdown with hourly information
-    if (this.basePrice > 0) {
-      const selectedRoom = document.querySelector('.room-option.selected');
-      const roomName = selectedRoom ? selectedRoom.querySelector('.room-name').textContent : 'Habitaciones seleccionadas';
-      
-      // Show hourly breakdown
-      if (this.estimatedHours <= this.minimumHours) {
-        breakdownHTML += `
-          <div class="breakdown-item">
-            <span>${roomName} (${this.estimatedHours}h estimadas)</span>
-            <span>$${this.minimumPrice}</span>
-          </div>
-          <div class="breakdown-item">
-            <span>Precio mínimo (3h)</span>
-            <span>$${this.minimumPrice}</span>
-          </div>
-        `;
-      } else {
-        const additionalHours = this.estimatedHours - this.minimumHours;
-        breakdownHTML += `
-          <div class="breakdown-item">
-            <span>${roomName} (${this.estimatedHours}h estimadas)</span>
-            <span>$${this.basePrice}</span>
-          </div>
-          <div class="breakdown-item">
-            <span>Precio mínimo (3h)</span>
-            <span>$${this.minimumPrice}</span>
-          </div>
-          <div class="breakdown-item">
-            <span>Horas adicionales (${additionalHours}h × $${this.hourlyRate})</span>
-            <span>$${additionalHours * this.hourlyRate}</span>
-          </div>
-        `;
-      }
-    } else {
+    if (this.basePrice <= 0) {
       breakdownHTML += `
         <div class="breakdown-item">
           <span>Selecciona el tamaño de tu hogar</span>
           <span>$0</span>
         </div>
       `;
+      breakdownElement.innerHTML = breakdownHTML;
+      return;
     }
     
-    
-    
-    // Total breakdown
+    const selectedRoom = document.querySelector('.room-option.selected');
+    const roomName = selectedRoom ? selectedRoom.querySelector('.room-name').textContent : 'Habitaciones seleccionadas';
     const calculatedPrice = this.basePrice;
     const totalPrice = Math.max(calculatedPrice, this.minimumPrice);
     
-    if (totalPrice > 0) {
-      // Show if minimum price is being enforced
-      if (calculatedPrice < this.minimumPrice && calculatedPrice > 0) {
-        breakdownHTML += `
-          <div class="breakdown-item">
-            <span>Subtotal calculado</span>
-            <span>$${calculatedPrice}</span>
-          </div>
-          <div class="breakdown-item">
-            <span>Precio mínimo aplicado</span>
-            <span>$${this.minimumPrice}</span>
-          </div>
-        `;
-      }
-      
+    // Show hourly breakdown
+    if (this.estimatedHours <= this.minimumHours) {
       breakdownHTML += `
-        <div class="breakdown-item total">
-          <span>Total estimado</span>
-          <span>$${totalPrice}</span>
+        <div class="breakdown-item">
+          <span>Precio mínimo (${this.minimumHours}h)</span>
+          <span>$${this.minimumPrice}</span>
+        </div>
+      `;
+    } else {
+      const additionalHours = this.estimatedHours - this.minimumHours;
+      breakdownHTML += `
+        <div class="breakdown-item">
+          <span>Precio mínimo (${this.minimumHours}h)</span>
+          <span>$${this.minimumPrice}</span>
+        </div>
+        <div class="breakdown-item">
+          <span>Horas adicionales (${additionalHours}h × $${this.hourlyRate}/h)</span>
+          <span>$${additionalHours * this.hourlyRate}</span>
         </div>
       `;
     }
+    
+    // Total at the end
+    breakdownHTML += `
+      <div class="breakdown-item total">
+        <span>Total estimado</span>
+        <span>$${totalPrice}</span>
+      </div>
+    `;
     
     breakdownElement.innerHTML = breakdownHTML;
   }
