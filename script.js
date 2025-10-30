@@ -1,14 +1,37 @@
 // Small enhancements: current year
 document.getElementById('year').textContent = new Date().getFullYear();
 
+// Configuration
+let config = null;
+
+// Load configuration
+async function loadConfig() {
+  try {
+    const response = await fetch('config.json');
+    config = await response.json();
+    return config;
+  } catch (error) {
+    console.error('Error loading config:', error);
+    // Fallback config
+    return {
+      pricing: {
+        minimumPrice: 165,
+        minimumHours: 3,
+        hourlyRate: 59
+      }
+    };
+  }
+}
+
 // Price Calculator Functionality
 class PriceCalculator {
-  constructor() {
+  constructor(config) {
+    this.config = config;
     this.basePrice = 0;
     this.estimatedHours = 0;
-    this.minimumHours = 3;
-    this.minimumPrice = 149;
-    this.hourlyRate = 49;
+    this.minimumHours = config.pricing.minimumHours;
+    this.minimumPrice = config.pricing.minimumPrice;
+    this.hourlyRate = config.pricing.hourlyRate;
     
     // Map room counts to estimated hours
     this.roomToHours = {
@@ -66,7 +89,7 @@ class PriceCalculator {
 
   updatePrice() {
     const calculatedPrice = this.basePrice;
-    // Ensure price never goes below minimum of $149
+    // Ensure price never goes below minimum price (loaded from config)
     const totalPrice = Math.max(calculatedPrice, this.minimumPrice);
     const priceElement = document.getElementById('total-price');
     const breakdownElement = document.getElementById('price-breakdown');
@@ -338,9 +361,40 @@ class IOSNavbarFix {
   }
 }
 
+// Function to update all dynamic price displays
+function updatePriceDisplays(config) {
+  const { minimumPrice, minimumHours, hourlyRate } = config.pricing;
+  
+  // Update price notes (in calculator section)
+  const priceNotes = document.querySelectorAll('[data-dynamic-price="note"]');
+  priceNotes.forEach(note => {
+    note.textContent = `Precio mínimo: $${minimumPrice} (${minimumHours}h) + $${hourlyRate}/h adicional`;
+  });
+  
+  // Update result notes (detailed description)
+  const resultNotes = document.querySelectorAll('[data-dynamic-price="description"]');
+  resultNotes.forEach(note => {
+    note.innerHTML = `💡 <strong>Precio estimado</strong> - Mínimo $${minimumPrice} por ${minimumHours} horas, luego $${hourlyRate}/h adicional. La cotización final puede variar según detalles específicos.`;
+  });
+  
+  // Update schema.org structured data price range
+  const schemaScript = document.querySelector('script[type="application/ld+json"]');
+  if (schemaScript) {
+    try {
+      const schema = JSON.parse(schemaScript.textContent);
+      schema.priceRange = `$${minimumPrice} - $500`;
+      schemaScript.textContent = JSON.stringify(schema, null, 2);
+    } catch (error) {
+      console.error('Error updating schema:', error);
+    }
+  }
+}
+
 // Initialize price calculator when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  new PriceCalculator();
+document.addEventListener('DOMContentLoaded', async () => {
+  const config = await loadConfig();
+  updatePriceDisplays(config);
+  new PriceCalculator(config);
   new ClipboardManager();
   new IOSNavbarFix();
 });

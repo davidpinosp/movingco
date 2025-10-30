@@ -1,0 +1,16 @@
+{
+  "pricing": {
+    "minimumPrice": 165,
+    "minimumHours": 3,
+    "hourlyRate": 59
+  },
+  "contact": {
+    "phone": "+593 99 579 6596",
+    "whatsapp": "593995796596"
+  },
+  "company": {
+    "name": "Nomada Mudanzas y Bodega",
+    "shortName": "Nómada"
+  }
+}
+
