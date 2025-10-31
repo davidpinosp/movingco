@@ -1,8 +1,8 @@
 {
   "pricing": {
-    "minimumPrice": 165,
+    "minimumPrice": 180,
     "minimumHours": 3,
-    "hourlyRate": 59
+    "hourlyRate": 60
   },
   "contact": {
     "phone": "+593 99 579 6596",
