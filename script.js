@@ -15,9 +15,9 @@ async function loadConfig() {
     // Fallback config
     return {
       pricing: {
-        minimumPrice: 165,
+        minimumPrice: 180,
         minimumHours: 3,
-        hourlyRate: 59
+        hourlyRate: 60
       }
     };
   }
