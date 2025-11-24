@@ -22,6 +22,15 @@
     gtag('config', 'AW-17717391663');
   </script>
 
+  <!-- Event snippet for Submit lead form conversion -->
+  <script>
+  function gtag_report_conversion() {
+    gtag('event', 'conversion', {
+      'send_to': 'AW-17717391663/KvrrCMS_isYbEK_ip4BC'
+    });
+  }
+  </script>
+
   <style>
     body {
       overflow: hidden;
@@ -1141,10 +1150,8 @@
           console.log('Form data sent successfully');
           
           // Track conversion on success
-          if (typeof gtag !== 'undefined') {
-            gtag('event', 'conversion', {
-              'send_to': 'AW-17717391663/KvrrCMS_isYbEK_ip4BC'
-            });
+          if (typeof gtag_report_conversion !== 'undefined') {
+            gtag_report_conversion();
           }
           
           // Show success message after loading animation
