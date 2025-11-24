@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <title>Cotizador de Mudanzas | Nómada Mudanzas y Bodega</title>
+  <meta name="description" content="Obtén tu cotización de mudanza en minutos. Responde algunas preguntas y recibe propuestas de empresas verificadas." />
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+  <link rel="stylesheet" href="styles.css" />
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17717391663"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-17717391663');
+  </script>
+
+  <style>
+    body {
+      overflow: hidden;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .cotizador-container {
+      flex: 1;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(135deg, var(--bg-grad-1) 0%, var(--bg) 50%, var(--bg-grad-2) 100%);
+      padding: 1rem;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    
+    .cotizador-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 650px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 24px;
+      -webkit-border-radius: 24px;
+      -moz-border-radius: 24px;
+    }
+    
+    .cotizador-header {
+      text-align: center;
+      margin-bottom: 1rem;
+      flex-shrink: 0;
+    }
+    
+    .cotizador-header h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin: 0.5rem 0;
+      color: var(--ink);
+    }
+    
+    .cotizador-header p {
+      font-size: 1rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    
+    .progress-bar {
+      height: 6px;
+      background: var(--ring);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+      flex-shrink: 0;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--brand), var(--brand-ink));
+      border-radius: 999px;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .form-card {
+      background: var(--card);
+      border-radius: 24px;
+      padding: 2rem;
+      box-shadow: var(--shadow-xl);
+      border: 1px solid var(--ring);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-border-radius: 24px;
+      -moz-border-radius: 24px;
+    }
+    
+    .form-step {
+      display: none;
+      animation: fadeInUp 0.25s ease;
+    }
+    
+    .form-step.active {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .step-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+      flex-shrink: 0;
+    }
+    
+    .step-question {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+      line-height: 1.3;
+      flex-shrink: 0;
+    }
+    
+    .option-grid {
+      display: grid;
+      gap: 0.75rem;
+    }
+    
+    .option-button {
+      background: var(--bg-grad-1);
+      border: 2px solid var(--ring);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .option-button:hover {
+      border-color: var(--brand);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      background: var(--card);
+    }
+    
+    .option-button.selected {
+      border-color: var(--brand);
+      background: var(--brand-light);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .option-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--brand-light);
+      border-radius: 8px;
+    }
+    
+    .option-button.selected .option-icon {
+      background: var(--brand);
+      color: white;
+    }
+    
+    .option-text {
+      flex: 1;
+    }
+    
+    .option-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    
+    .option-desc {
+      font-size: 0.875rem;
+      color: var(--muted);
+      font-weight: 400;
+    }
+    
+    .input-group {
+      margin-bottom: 1rem;
+    }
+    
+    .input-wrapper {
+      position: relative;
+    }
+    
+    .input-icon {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.25rem;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+    
+    .input-label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      font-size: 1rem;
+      border: 2px solid var(--ring);
+      border-radius: 12px;
+      background: var(--bg-grad-1);
+      color: var(--ink);
+      transition: all 0.2s ease;
+      font-family: inherit;
+      box-sizing: border-box;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+    
+    .form-input[readonly] {
+      cursor: pointer;
+      background: var(--card);
+      padding-right: 3rem;
+    }
+    
+    .form-input[type="date"]::-webkit-calendar-picker-indicator {
+      border-radius: 4px;
+    }
+    
+    /* Pikaday Custom Styles */
+    .pika-single {
+      font-family: inherit !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12) !important;
+      border: 1px solid var(--ring) !important;
+      border-radius: 16px !important;
+      overflow: hidden;
+      background: var(--card) !important;
+      z-index: 9999 !important;
+    }
+    
+    .pika-lendar {
+      width: 280px;
+    }
+    
+    .pika-title {
+      background: var(--card) !important;
+      padding: 16px 12px !important;
+      border-bottom: 1px solid var(--ring);
+    }
+    
+    .pika-label {
+      font-size: 16px !important;
+      font-weight: 600 !important;
+      color: var(--ink) !important;
+      background: transparent !important;
+    }
+    
+    .pika-prev,
+    .pika-next {
+      background: transparent !important;
+      border-radius: 50%;
+      transition: all 0.2s ease;
+      opacity: 1 !important;
+      width: 32px !important;
+      height: 32px !important;
+      margin-top: 0 !important;
+      color: var(--muted) !important;
+      font-size: 24px !important;
+      line-height: 32px !important;
+      font-weight: 400 !important;
+      background-image: none !important;
+      text-indent: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    
+    .pika-prev:hover,
+    .pika-next:hover {
+      background: var(--bg-grad-1) !important;
+      opacity: 1 !important;
+      color: var(--ink) !important;
+    }
+    
+    .pika-table {
+      background: var(--card) !important;
+    }
+    
+    .pika-table th {
+      color: var(--muted) !important;
+      font-weight: 600 !important;
+      font-size: 12px !important;
+      text-transform: uppercase;
+      padding: 8px 0 !important;
+    }
+    
+    .pika-button {
+      color: var(--ink) !important;
+      border-radius: 50% !important;
+      background: transparent !important;
+      font-weight: 500 !important;
+      transition: all 0.15s ease !important;
+      width: 36px !important;
+      height: 36px !important;
+      text-align: center !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+    
+    .pika-button:hover {
+      background: var(--bg-grad-1) !important;
+      color: var(--ink) !important;
+      border-radius: 50% !important;
+      box-shadow: none !important;
+    }
+    
+    .is-today .pika-button {
+      background: transparent !important;
+      color: var(--brand) !important;
+      font-weight: 600 !important;
+      border: 2px solid var(--brand) !important;
+      box-shadow: none !important;
+    }
+    
+    .is-today .pika-button:hover {
+      background: var(--brand-light) !important;
+    }
+    
+    .is-selected .pika-button {
+      background: var(--brand) !important;
+      color: white !important;
+      font-weight: 600 !important;
+      box-shadow: none !important;
+      border: none !important;
+    }
+    
+    .is-selected .pika-button:hover {
+      background: var(--brand-ink) !important;
+    }
+    
+    .is-disabled .pika-button,
+    .is-outside-current-month .pika-button {
+      color: var(--muted) !important;
+      opacity: 0.3 !important;
+      pointer-events: none;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--brand);
+      background: var(--card);
+      box-shadow: 0 0 0 4px var(--brand-light);
+    }
+    
+    .form-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: auto;
+      padding-top: 1.5rem;
+      flex-shrink: 0;
+    }
+    
+    .btn-back {
+      flex: 0 0 auto;
+      padding: 0.875rem 1.25rem;
+      background: var(--bg-grad-1);
+      border: 2px solid var(--ring);
+      color: var(--muted);
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+    
+    .btn-back:hover {
+      background: var(--card);
+      border-color: var(--brand-light);
+      color: var(--ink);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .btn-next {
+      flex: 1;
+      padding: 0.875rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 12px;
+    }
+    
+    .success-message {
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+    
+    .success-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      animation: scaleIn 0.5s ease;
+    }
+    
+    @keyframes scaleIn {
+      from {
+        transform: scale(0);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    .success-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 0.75rem;
+    }
+    
+    .success-text {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    
+    .summary-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      overflow-y: auto;
+      flex: 1;
+      max-height: 100%;
+    }
+    
+    .summary-item {
+      background: var(--bg-grad-1);
+      border: 1px solid var(--ring);
+      border-radius: 12px;
+      padding: 0.875rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    
+    .summary-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    
+    .summary-value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--ink);
+      text-align: right;
+    }
+    
+    .loading-message {
+      text-align: center;
+      padding: 3rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .loading-spinner {
+      margin-bottom: 2rem;
+    }
+    
+    .spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid var(--ring);
+      border-top: 4px solid var(--brand);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .loading-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin: 0;
+      animation: fadeInOut 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+    
+    @media (max-width: 640px) {
+      .cotizador-header h1 {
+        font-size: 1.5rem;
+      }
+      
+      .step-question {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+      }
+      
+      .form-card {
+        padding: 1.5rem 1rem;
+      }
+      
+      .option-button {
+        padding: 0.875rem 1rem;
+      }
+      
+      .option-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 1.25rem;
+      }
+      
+      .option-title {
+        font-size: 0.9375rem;
+      }
+      
+      .option-desc {
+        font-size: 0.8125rem;
+      }
+      
+      .summary-container {
+        gap: 0.625rem;
+      }
+      
+      .summary-item {
+        padding: 0.75rem 0.875rem;
+      }
+      
+      .summary-label,
+      .summary-value {
+        font-size: 0.8125rem;
+      }
+      
+      /* Mobile button adaptations - Stack vertically with Next first */
+      .form-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+        padding-top: 1.25rem;
+      }
+      
+      .btn-back {
+        flex: none;
+        width: 100%;
+        padding: 0.875rem 1rem;
+        font-size: 1rem;
+        min-height: 48px;
+        order: 2;
+      }
+      
+      .btn-next {
+        flex: none;
+        width: 100%;
+        padding: 1rem 1.25rem;
+        font-size: 1.0625rem;
+        font-weight: 700;
+        min-height: 52px;
+        order: 1;
+      }
+      
+      .btn-next:active {
+        transform: scale(0.98);
+      }
+      
+      .btn-back:active {
+        transform: scale(0.98);
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .form-actions {
+        gap: 0.625rem;
+      }
+      
+      .btn-back {
+        padding: 0.875rem 1rem;
+        font-size: 0.9375rem;
+        min-height: 48px;
+      }
+      
+      .btn-next {
+        padding: 0.875rem 1rem;
+        font-size: 1rem;
+        min-height: 48px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html">
+        <img src="assets/images/plantLogo.png" alt="Nómada - Servicios del hogar en un solo lugar" class="logo-img" />
+        <div class="brand-text">
+          <span class="brand-name">Nómada</span>
+          <span class="brand-subtitle">Servicios del hogar verificados</span>
+        </div>
+      </a>
+      <div class="nav-right">
+        <a class="nav-phone" href="tel:+593995796596" onclick="gtag('event', 'conversion', {'send_to': 'AW-17717391663/phone_click'});">📞 +593 99 579 6596</a>
+            <a class="btn btn-primary" href="cotizador.html">
+              <span class="btn-text-full">¡Cotiza Ahora!</span>
+              <span class="btn-text-short">Cotizar</span>
+            </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="cotizador-container">
+    <div class="cotizador-wrapper">
+      <div class="cotizador-header">
+        <h1>Cotiza tu Mudanza</h1>
+        <p>Solo te tomará 1 minuto</p>
+      </div>
+      
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressBar" style="width: 20%;"></div>
+      </div>
+      
+      <div class="form-card">
+        <form id="cotizadorForm">
+          
+          <!-- Step 1: City -->
+          <div class="form-step active" data-step="1">
+            <div class="step-label">Paso 1 de 5</div>
+            <h2 class="step-question">¿En qué ciudad te encuentras?</h2>
+            <div class="option-grid">
+              <button type="button" class="option-button" data-value="Quito" onclick="selectOption(this, 'city')">
+                <div class="option-icon">🏙️</div>
+                <div class="option-text">
+                  <div class="option-title">Quito</div>
+                  <div class="option-desc">Norte, Centro y Sur de Quito</div>
+                </div>
+              </button>
+              <button type="button" class="option-button" data-value="Cumbayá" onclick="selectOption(this, 'city')">
+                <div class="option-icon">🏡</div>
+                <div class="option-text">
+                  <div class="option-title">Cumbayá</div>
+                  <div class="option-desc">Valle de Tumbaco y alrededores</div>
+                </div>
+              </button>
+              <button type="button" class="option-button" data-value="Los Chillos" onclick="selectOption(this, 'city')">
+                <div class="option-icon">🌄</div>
+                <div class="option-text">
+                  <div class="option-title">Los Chillos</div>
+                  <div class="option-desc">Valle de Los Chillos y Sangolquí</div>
+                </div>
+              </button>
+            </div>
+            <input type="hidden" name="city" id="city" required>
+          </div>
+          
+          <!-- Step 2: Date -->
+          <div class="form-step" data-step="2">
+            <div class="step-label">Paso 2 de 5</div>
+            <h2 class="step-question">¿Cuándo necesitas la mudanza?</h2>
+            <div class="input-group">
+              <label class="input-label" for="date">Selecciona una fecha</label>
+              <div class="input-wrapper">
+                <input type="text" class="form-input" id="date" name="date" placeholder="Haz clic para elegir fecha" required readonly>
+                <span class="input-icon">📅</span>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-back" onclick="prevStep()">← Anterior</button>
+            </div>
+          </div>
+          
+          <!-- Step 3: Destination -->
+          <div class="form-step" data-step="3">
+            <div class="step-label">Paso 3 de 5</div>
+            <h2 class="step-question">¿A dónde te mudas?</h2>
+            <div class="option-grid">
+              <button type="button" class="option-button" data-value="Quito" onclick="selectOption(this, 'destination')">
+                <div class="option-icon">🏙️</div>
+                <div class="option-text">
+                  <div class="option-title">Quito</div>
+                </div>
+              </button>
+              <button type="button" class="option-button" data-value="Cumbayá" onclick="selectOption(this, 'destination')">
+                <div class="option-icon">🏡</div>
+                <div class="option-text">
+                  <div class="option-title">Cumbayá</div>
+                </div>
+              </button>
+              <button type="button" class="option-button" data-value="Los Chillos" onclick="selectOption(this, 'destination')">
+                <div class="option-icon">🌄</div>
+                <div class="option-text">
+                  <div class="option-title">Los Chillos</div>
+                </div>
+              </button>
+              <button type="button" class="option-button" data-value="Otra ciudad" onclick="selectOption(this, 'destination')">
+                <div class="option-icon">🗺️</div>
+                <div class="option-text">
+                  <div class="option-title">Otra ciudad</div>
+                </div>
+              </button>
+            </div>
+            <input type="hidden" name="destination" id="destination" required>
+            <div class="form-actions">
+              <button type="button" class="btn btn-back" onclick="prevStep()">← Anterior</button>
+            </div>
+          </div>
+          
+          <!-- Step 4: Number of Rooms -->
+          <div class="form-step" data-step="4">
+            <div class="step-label">Paso 4 de 5</div>
+            <h2 class="step-question">¿Cuántos dormitorios tiene tu hogar?</h2>
+            <div class="option-grid">
+              <button type="button" class="option-button" data-value="1 dormitorio o estudio" onclick="selectOption(this, 'rooms')">
+                <div class="option-icon">🛋️</div>
+                <div class="option-text">
+                  <div class="option-title">1 dormitorio o estudio</div>
+                </div>
+              </button>
+              <button type="button" class="option-button" data-value="2 dormitorios" onclick="selectOption(this, 'rooms')">
+                <div class="option-icon">🏘️</div>
+                <div class="option-text">
+                  <div class="option-title">2 dormitorios</div>
+                </div>
+              </button>
+              <button type="button" class="option-button" data-value="3 dormitorios" onclick="selectOption(this, 'rooms')">
+                <div class="option-icon">🏠</div>
+                <div class="option-text">
+                  <div class="option-title">3 dormitorios</div>
+                </div>
+              </button>
+              <button type="button" class="option-button" data-value="4+ dormitorios" onclick="selectOption(this, 'rooms')">
+                <div class="option-icon">🏡</div>
+                <div class="option-text">
+                  <div class="option-title">4+ dormitorios</div>
+                </div>
+              </button>
+            </div>
+            <input type="hidden" name="rooms" id="rooms" required>
+            <div class="form-actions">
+              <button type="button" class="btn btn-back" onclick="prevStep()">← Anterior</button>
+            </div>
+          </div>
+          
+          <!-- Step 5: Name -->
+          <div class="form-step" data-step="5">
+            <div class="step-label">Paso 5 de 7</div>
+            <h2 class="step-question">¿Cuál es tu nombre?</h2>
+            <div class="input-group">
+              <label class="input-label" for="firstName">Nombre</label>
+              <input type="text" class="form-input" id="firstName" name="firstName" placeholder="Tu nombre" required>
+            </div>
+            <div class="input-group">
+              <label class="input-label" for="lastName">Apellido</label>
+              <input type="text" class="form-input" id="lastName" name="lastName" placeholder="Tu apellido" required>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-back" onclick="prevStep()">← Anterior</button>
+              <button type="button" class="btn btn-primary btn-next" onclick="nextStep()">Siguiente →</button>
+            </div>
+          </div>
+          
+          <!-- Step 6: Phone -->
+          <div class="form-step" data-step="6">
+            <div class="step-label">Paso 6 de 7</div>
+            <h2 class="step-question">¿Cuál es tu número de WhatsApp?</h2>
+            <div class="input-group">
+              <label class="input-label" for="phone">WhatsApp / Teléfono</label>
+              <input type="tel" class="form-input" id="phone" name="phone" placeholder="0999999999" pattern="09[0-9]{8}" maxlength="10" required>
+              <div style="font-size: 0.8125rem; color: var(--muted); margin-top: 0.5rem;">
+                Debe iniciar con 09 y tener 10 dígitos
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-back" onclick="prevStep()">← Anterior</button>
+              <button type="button" class="btn btn-primary btn-next" onclick="showSummaryAndNext()">Siguiente →</button>
+            </div>
+          </div>
+          
+          <!-- Step 7: Summary -->
+          <div class="form-step" data-step="7">
+            <div class="step-label">Paso 7 de 7</div>
+            <h2 class="step-question">Resumen de tu mudanza</h2>
+            <div class="summary-container">
+              <div class="summary-item">
+                <div class="summary-label">📍 Desde</div>
+                <div class="summary-value" id="summary-city"></div>
+              </div>
+              <div class="summary-item">
+                <div class="summary-label">📍 Hacia</div>
+                <div class="summary-value" id="summary-destination"></div>
+              </div>
+              <div class="summary-item">
+                <div class="summary-label">📅 Fecha</div>
+                <div class="summary-value" id="summary-date"></div>
+              </div>
+              <div class="summary-item">
+                <div class="summary-label">🏠 Dormitorios</div>
+                <div class="summary-value" id="summary-rooms"></div>
+              </div>
+              <div class="summary-item">
+                <div class="summary-label">👤 Nombre</div>
+                <div class="summary-value" id="summary-name"></div>
+              </div>
+              <div class="summary-item">
+                <div class="summary-label">📱 WhatsApp</div>
+                <div class="summary-value" id="summary-phone"></div>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-back" onclick="prevStep()">← Anterior</button>
+              <button type="button" class="btn btn-primary btn-next" onclick="submitForm()">Enviar Cotización ✨</button>
+            </div>
+          </div>
+          
+          <!-- Step 8: Loading -->
+          <div class="form-step" data-step="8">
+            <div class="loading-message">
+              <div class="loading-spinner">
+                <div class="spinner"></div>
+              </div>
+              <h2 class="loading-title" id="loadingText">Buscando las mejores empresas...</h2>
+            </div>
+          </div>
+          
+          <!-- Step 9: Success -->
+          <div class="form-step" data-step="9">
+            <div class="success-message">
+              <div class="success-icon">✅</div>
+              <h2 class="success-title">¡Cotización Enviada!</h2>
+              <p class="success-text">Pronto recibirás propuestas de empresas verificadas en tu WhatsApp</p>
+              <a href="index.html" class="btn btn-primary">Volver al Inicio</a>
+            </div>
+          </div>
+          
+        </form>
+      </div>
+      <div style="text-align: center; padding: 1rem 0 0.5rem 0;">
+        <a href="index.html" style="color: var(--muted); text-decoration: none; font-size: 0.875rem; opacity: 0.7;">
+          ← Volver al inicio
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+  <script>
+    let currentStep = 1;
+    const totalSteps = 7;
+    const formData = {};
+    
+    // Initialize Pikaday with modern design
+    const dateInput = document.getElementById('date');
+    const today = new Date();
+    
+    const picker = new Pikaday({
+      field: dateInput,
+      format: 'DD/MM/YYYY',
+      minDate: today,
+      defaultDate: null,
+      firstDay: 1,
+      i18n: {
+        previousMonth: '‹',
+        nextMonth: '›',
+        months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        weekdays: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
+      },
+      onSelect: function(date) {
+        autoAdvance();
+      }
+    });
+    
+    function selectOption(button, fieldName) {
+      // Remove selected class from siblings
+      const siblings = button.parentElement.querySelectorAll('.option-button');
+      siblings.forEach(btn => btn.classList.remove('selected'));
+      
+      // Add selected class to clicked button
+      button.classList.add('selected');
+      
+      // Store value
+      const value = button.getAttribute('data-value');
+      document.getElementById(fieldName).value = value;
+      formData[fieldName] = value;
+      
+      // Auto-advance to next step after short delay
+      setTimeout(() => {
+        nextStep();
+      }, 200);
+    }
+    
+    function autoAdvance() {
+      // Auto-advance for date input
+      if (document.getElementById('date').value) {
+        setTimeout(() => {
+          nextStep();
+        }, 200);
+      }
+    }
+    
+    function showSummaryAndNext() {
+      if (!validateCurrentStep()) {
+        return;
+      }
+      showSummary();
+      nextStep();
+    }
+    
+    function formatDate(dateString) {
+      // If already in DD/MM/YYYY format, return as is
+      if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) {
+        return dateString;
+      }
+      // Otherwise, parse and format to DD/MM/YYYY
+      const date = new Date(dateString);
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
+    
+    function showSummary() {
+      document.getElementById('summary-city').textContent = document.getElementById('city').value;
+      document.getElementById('summary-destination').textContent = document.getElementById('destination').value;
+      const dateValue = document.getElementById('date').value;
+      document.getElementById('summary-date').textContent = formatDate(dateValue);
+      document.getElementById('summary-rooms').textContent = document.getElementById('rooms').value;
+      document.getElementById('summary-name').textContent = `${document.getElementById('firstName').value} ${document.getElementById('lastName').value}`;
+      document.getElementById('summary-phone').textContent = document.getElementById('phone').value;
+    }
+    
+    function nextStep() {
+      // Validate current step before proceeding
+      if (!validateCurrentStep()) {
+        return;
+      }
+      
+      if (currentStep < totalSteps) {
+        // Hide current step
+        document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.remove('active');
+        
+        // Show next step
+        currentStep++;
+        document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.add('active');
+        
+        // Update progress
+        updateProgress();
+      }
+    }
+    
+    function validateCurrentStep() {
+      const currentStepElement = document.querySelector(`.form-step[data-step="${currentStep}"]`);
+      const requiredInputs = currentStepElement.querySelectorAll('input[required]');
+      
+      for (let input of requiredInputs) {
+        if (!input.value.trim()) {
+          showInputError(input, 'Este campo es obligatorio');
+          return false;
+        }
+        
+        // Special validation for phone number (Ecuador format)
+        if (input.id === 'phone') {
+          const phoneValue = input.value.trim().replace(/\s+/g, ''); // Remove spaces
+          const phoneRegex = /^09\d{8}$/; // Must start with 09 and have 10 digits total
+          
+          if (!phoneRegex.test(phoneValue)) {
+            showInputError(input, 'Ingresa un número válido (10 dígitos, ejemplo: 0999999999)');
+            return false;
+          }
+          
+          // Update the input value to remove any spaces
+          input.value = phoneValue;
+        }
+      }
+      
+      return true;
+    }
+    
+    function showInputError(input, message) {
+      input.focus();
+      input.style.borderColor = '#ef4444';
+      input.style.animation = 'shake 0.3s ease';
+      
+      // Check if error message already exists
+      let errorElement = input.parentElement.querySelector('.error-message');
+      if (!errorElement) {
+        errorElement = document.createElement('div');
+        errorElement.className = 'error-message';
+        errorElement.style.cssText = 'color: #ef4444; font-size: 0.875rem; margin-top: 0.5rem; font-weight: 500;';
+        input.parentElement.appendChild(errorElement);
+      }
+      
+      errorElement.textContent = message;
+      
+      // Reset animation and remove error after delay
+      setTimeout(() => {
+        input.style.animation = '';
+      }, 300);
+      
+      // Remove error message when user starts typing
+      const removeError = () => {
+        if (errorElement && errorElement.parentElement) {
+          errorElement.remove();
+        }
+        input.style.borderColor = '';
+        input.removeEventListener('input', removeError);
+      };
+      
+      input.addEventListener('input', removeError);
+    }
+    
+    function prevStep() {
+      if (currentStep > 1 && currentStep <= totalSteps) {
+        // Hide current step
+        document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.remove('active');
+        
+        // Show previous step
+        currentStep--;
+        document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.add('active');
+        
+        // Update progress
+        updateProgress();
+      }
+    }
+    
+    function updateProgress() {
+      const progress = (currentStep / totalSteps) * 100;
+      document.getElementById('progressBar').style.width = progress + '%';
+    }
+    
+    async function submitForm() {
+      // Collect all form data
+      const dateValue = document.getElementById('date').value;
+      const formDataObj = {
+        city: document.getElementById('city').value,
+        date: formatDate(dateValue),
+        destination: document.getElementById('destination').value,
+        rooms: document.getElementById('rooms').value,
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        phone: document.getElementById('phone').value
+      };
+      
+      // Show loading step
+      document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.remove('active');
+      currentStep = 8;
+      document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.add('active');
+      document.getElementById('progressBar').style.width = '100%';
+      
+      // Dynamic loading phrases with selected city
+      const loadingPhrases = [
+        `Buscando las mejores empresas en ${formDataObj.city}...`,
+        'Analizando tu mudanza...',
+        'Comparando precios y servicios...',
+        'Verificando disponibilidad...',
+        'Seleccionando las mejores opciones para ti...',
+        'Casi listo...'
+      ];
+      
+      let phraseIndex = 0;
+      const loadingText = document.getElementById('loadingText');
+      
+      const phraseInterval = setInterval(() => {
+        phraseIndex++;
+        if (phraseIndex < loadingPhrases.length) {
+          loadingText.textContent = loadingPhrases[phraseIndex];
+        }
+      }, 1500);
+      
+      // Track conversion
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'conversion', {'send_to': 'AW-17717391663/form_submit'});
+      }
+      
+      // Production API endpoint
+      const API_ENDPOINT = 'https://arreglaya.app.n8n.cloud/webhook/346c048e-d643-44b1-894e-5b7c60d3d922';
+      
+      try {
+        console.log('Sending data to webhook:', formDataObj);
+        
+        // Send data and check response status
+        const response = await fetch(API_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formDataObj)
+        });
+        
+        console.log('Response status:', response.status);
+        
+        // Check if the response is successful (2xx status codes)
+        if (response.ok) {
+          console.log('Form data sent successfully');
+          
+          // Show success message after loading animation
+          setTimeout(() => {
+            clearInterval(phraseInterval);
+            document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.remove('active');
+            currentStep = 9;
+            document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.add('active');
+          }, 9000); // 9 seconds total (6 phrases * 1.5s)
+          
+        } else {
+          // Handle non-2xx status codes (400, 500, etc.)
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+        
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        clearInterval(phraseInterval);
+        
+        // Show error message
+        loadingText.textContent = 'Ocurrió un error. Por favor, intenta nuevamente.';
+        
+        // Return to summary step after 3 seconds
+        setTimeout(() => {
+          document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.remove('active');
+          currentStep = 7;
+          document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.add('active');
+          updateProgress();
+        }, 3000);
+      }
+    }
+    
+    // Phone number input formatting
+    const phoneInput = document.getElementById('phone');
+    
+    phoneInput.addEventListener('input', function(e) {
+      // Remove all non-numeric characters
+      let value = e.target.value.replace(/\D/g, '');
+      
+      // Limit to 10 digits
+      if (value.length > 10) {
+        value = value.slice(0, 10);
+      }
+      
+      e.target.value = value;
+    });
+    
+    phoneInput.addEventListener('keypress', function(e) {
+      // Allow only numeric characters
+      if (e.which < 48 || e.which > 57) {
+        e.preventDefault();
+      }
+    });
+    
+    // Initialize
+    updateProgress();
+  </script>
+</body>
+</html>
+
