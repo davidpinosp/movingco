@@ -876,7 +876,7 @@
           <div class="form-step" data-step="9">
             <div class="success-message">
               <div class="success-icon">✅</div>
-              <h2 class="success-title">¡Cotización Enviada!</h2>
+              <h2 class="success-title">¡Cotización Solicitada!</h2>
               <p class="success-text">Pronto recibirás propuestas de empresas verificadas en tu WhatsApp</p>
               <a href="index.html" class="btn btn-primary">Volver al Inicio</a>
             </div>
@@ -1099,10 +1099,11 @@
       
       // Dynamic loading phrases with selected city
       const loadingPhrases = [
-        `Buscando las mejores empresas en ${formDataObj.city}...`,
-        'Analizando tu mudanza...',
-        'Comparando precios y servicios...',
-        'Verificando disponibilidad...',
+        
+        `Buscando empresas verificadas en ${formDataObj.city}...`,
+        'Conectando con proveedores certificados...',
+        'Analizando disponibilidad de empresas...',
+        'Verificando calificaciones y reseñas...',
         'Seleccionando las mejores opciones para ti...',
         'Casi listo...'
       ];
@@ -1149,7 +1150,7 @@
             document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.remove('active');
             currentStep = 9;
             document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.add('active');
-          }, 9000); // 9 seconds total (6 phrases * 1.5s)
+          }, 10500); // 10.5 seconds total (7 phrases * 1.5s)
           
         } else {
           // Handle non-2xx status codes (400, 500, etc.)
