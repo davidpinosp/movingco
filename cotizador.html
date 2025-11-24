@@ -18,6 +18,7 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
+    
     gtag('config', 'AW-17717391663');
   </script>
 
@@ -650,7 +651,7 @@
         </div>
       </a>
       <div class="nav-right">
-        <a class="nav-phone" href="tel:+593995796596" onclick="gtag('event', 'conversion', {'send_to': 'AW-17717391663/phone_click'});">📞 +593 99 579 6596</a>
+        <a class="nav-phone" href="tel:+593995796596">📞 +593 99 579 6596</a>
             <a class="btn btn-primary" href="cotizador.html">
               <span class="btn-text-full">¡Cotiza Ahora!</span>
               <span class="btn-text-short">Cotizar</span>
@@ -1118,11 +1119,6 @@
         }
       }, 1500);
       
-      // Track conversion
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'conversion', {'send_to': 'AW-17717391663/form_submit'});
-      }
-      
       // Production API endpoint
       const API_ENDPOINT = 'https://arreglaya.app.n8n.cloud/webhook/346c048e-d643-44b1-894e-5b7c60d3d922';
       
@@ -1143,6 +1139,13 @@
         // Check if the response is successful (2xx status codes)
         if (response.ok) {
           console.log('Form data sent successfully');
+          
+          // Track conversion on success
+          if (typeof gtag !== 'undefined') {
+            gtag('event', 'conversion', {
+              'send_to': 'AW-17717391663/KvrrCMS_isYbEK_ip4BC'
+            });
+          }
           
           // Show success message after loading animation
           setTimeout(() => {
